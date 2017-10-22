@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script>
+        window.onload = function() {
+            var btn = document.getElementById('btn');
+            var errorContainer = document.getElementById('errorMsg');
+            btn.addEventListener('click', sendData);
+
+            function sendData() {
+                var xhttp = new XMLHttpRequest();
+                xhttp.open('POST', 'add/newItem');
+                var inputs = document.getElementsByTagName('input');
+
+                for (var i = 0; i < inputs.length - 1; i++) {
+                    if (inputs[i].value == "") {
+                        errorContainer.innerHTML = "Error! Empty Field";
+                        console.log('Empty Field');
+                        return;
+
+                    }
+                }
+
+                errorContainer.innerHTML = '';
+                var item = {
+                    name: inputs[0].value,
+                    description: inputs[1].value,
+                    get completed() {
+                        return inputs[2].checked ? 1 : 0
+                    }
+                };
+                console.log(item);
+                var data = JSON.stringify(item);
+                xhttp.setRequestHeader('Content-Type','application/json');
+                xhttp.send(data);
+            }
+
+        }
+    </script>
+</head>
+<body>
+    <div class="panel well">
+        <h3>Add Item!</h3>
+        <div class="form-group">
+            <label>Name: <input type="text" class="form-control" /></label>
+        </div>
+        <div class="form-group">
+            <label>Description: <input type="text" class="form-control" /></label>
+        </div>
+        <div class="form-group">
+            <label>Completed: <input type="checkbox" class="form-control" /></label>
+        </div>
+        <div class="form-group">
+            <a href="/" class="btn btn-lg btn-info" id='btn'>Apply</a>
+            <h5 style="color:#f00; font-weight: bold" id='errorMsg'></h5>
+        </div>
+    </div>
+</body>
+</html>
